@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Store from './store/store'
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -16,6 +17,11 @@ export default new Router({
     {
       path: '/chat',
       name: 'chat',
+      beforeEnter: (to, from, next) => {
+        if(!Store.state.user.currentUser.token){
+          next(new Error("Nicht angemeldet"));
+        }
+      },
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -23,3 +29,8 @@ export default new Router({
     }
   ]
 })
+
+router.onError(() => {
+});
+
+export default router;

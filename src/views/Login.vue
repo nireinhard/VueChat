@@ -14,7 +14,7 @@
         required
         autofocus
       >
-
+      
       <label for="inputPassword" class="sr-only">Passwort</label>
       <input
         v-model="password"
@@ -55,6 +55,7 @@
 <script>
 export default {
   name: "Login",
+  mounted() {},
   data() {
     return {
       loginMode: true,
@@ -68,46 +69,96 @@ export default {
     };
   },
   methods: {
+    showDialog(mode, message) {
+      this.$notify({
+        group: "all",
+        type: mode,
+        text: message
+      });
+    },
+    showLoading(callback) {
+      let loader = this.$loading.show({
+        // Optional parameters
+        canCancel: false,
+        onCancel: null
+      });
+      callback(loader);
+    },
     toggleMode() {
       this.loginMode = !this.loginMode;
     },
     sendForm() {
-      this.loginMode ? this.login() : this.register();
+      this.showLoading(loader => {
+        this.loginMode
+          ? this.login()
+              .then(() => {
+                loader.hide();
+                // redirect to chats
+                this.$router.push({ name: "chat" });
+              })
+              .catch(() => {
+                loader.hide();
+              })
+          : this.register()
+              .then(() => {
+                loader.hide();
+                this.loginMode = true;
+              })
+              .catch(() => {
+                loader.hide();
+              });
+      });
     },
     login() {
-      this.$store
-        .dispatch("user/LOGIN_USER", {"username":this.username, "password":this.password})
-        .then(res => {
-          this.$notify({
-            group: "all",
-            type: "success",
-            text: "Erfolgreich angemeldet"
+      return new Promise((resolve, reject) => {
+        this.$store
+          .dispatch("user/LOGIN_USER", {
+            username: this.username,
+            password: this.password
+          })
+          .then(res => {
+            this.showDialog("success", "Erfolgreich angemeldet");
+            resolve();
+            // extract jwt token
+            console.log(res);
+            const token = res.headers.authorization;
+            console.log(token);
+            // set jwt token
+          })
+          .catch(err => {
+            // show error
+            this.$notify({
+              group: "all",
+              type: "error",
+              text: err
+            });
+
+            reject();
           });
-          // extract jwt token
-          console.log(res);
-          const token = res.headers.authorization;
-          console.log(token);
-          // set jwt token
-          // redirect to chats
-        })
-        .catch(err => {
-          // show error
-          this.$notify({
-            group: "all",
-            type: "error",
-            text: err
-          });
-        });
+      });
     },
     register() {
-      // register user
-      this.password === this.passwordRetype
-        ? null
-        : this.$notify({
-            group: "all",
-            type: "error",
-            text: "Register failed"
-          });
+      return new Promise((resolve, reject) => {
+        // register user
+        if (this.password === this.passwordRetype) {
+          this.$store
+            .dispatch("user/REGISTER_USER", {
+              username: this.username,
+              password: this.password
+            })
+            .then(res => {
+              this.showDialog("success", "Registrierung erfolgreich");
+              resolve();
+            })
+            .catch(err => {
+              this.showDialog("error", "Fehler bei der Registrierung");
+              reject();
+            });
+        } else {
+          this.showDialog("error", "Passwörter müssen übereinstimmen");
+          reject();
+        }
+      });
     }
   }
 };

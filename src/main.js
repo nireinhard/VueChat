@@ -7,6 +7,9 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Notifications from 'vue-notification'
 import VueNativeNotification from 'vue-native-notification'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css';
+
  
 Vue.use(VueNativeNotification, {
   requestOnNotify: true
@@ -14,6 +17,7 @@ Vue.use(VueNativeNotification, {
 
 Vue.config.productionTip = false;
 Vue.use(Notifications)
+Vue.use(Loading);
 
 const bus = new Vue();
 Object.defineProperty(Vue.prototype, '$bus', { get () { return this.$root.bus } })

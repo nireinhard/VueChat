@@ -5,5 +5,6 @@ export const HTTP = axios.create({
 });
 
 export const ROUTES = {
-  'signin': 'auth/signin'
+  'signin': 'auth/signin',
+  'signup': 'auth/signup'
 };
