@@ -6,7 +6,11 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Notifications from 'vue-notification'
-
+import VueNativeNotification from 'vue-native-notification'
+ 
+Vue.use(VueNativeNotification, {
+  requestOnNotify: true
+});
 
 Vue.config.productionTip = false;
 Vue.use(Notifications)

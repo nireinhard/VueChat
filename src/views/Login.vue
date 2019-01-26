@@ -6,15 +6,15 @@
 
       <label for="inputEmail" class="sr-only">E-Mail Addresse</label>
       <input
-        v-model="email"
-        type="email"
+        v-model="username"
+        type="text"
         id="inputEmail"
         class="form-control"
-        placeholder="E-Mail Addresse"
+        placeholder="Benutzername"
         required
         autofocus
       >
-      
+
       <label for="inputPassword" class="sr-only">Passwort</label>
       <input
         v-model="password"
@@ -58,7 +58,7 @@ export default {
   data() {
     return {
       loginMode: true,
-      email: "",
+      username: "",
       password: "",
       passwordRetype: "",
       error: {
@@ -75,21 +75,39 @@ export default {
       this.loginMode ? this.login() : this.register();
     },
     login() {
-      // log user in
-      this.$notify({
-        group: "all",
-        type: "error",
-        text: "Login failed",
-      });
+      this.$store
+        .dispatch("user/LOGIN_USER", {"username":this.username, "password":this.password})
+        .then(res => {
+          this.$notify({
+            group: "all",
+            type: "success",
+            text: "Erfolgreich angemeldet"
+          });
+          // extract jwt token
+          console.log(res);
+          const token = res.headers.authorization;
+          console.log(token);
+          // set jwt token
+          // redirect to chats
+        })
+        .catch(err => {
+          // show error
+          this.$notify({
+            group: "all",
+            type: "error",
+            text: err
+          });
+        });
     },
     register() {
       // register user
-       this.password === this.passwordRetype ? null :
-       this.$notify({
-        group: "all",
-        type: "error",
-        text: "Register failed",
-      });
+      this.password === this.passwordRetype
+        ? null
+        : this.$notify({
+            group: "all",
+            type: "error",
+            text: "Register failed"
+          });
     }
   }
 };
@@ -129,7 +147,7 @@ body {
 .form-signin .form-control:focus {
   z-index: 2;
 }
-.form-signin input[type="email"] {
+.form-signin input[type="text"] {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;

@@ -1,9 +1,8 @@
-/**
- * Created by niklasreinhard on 02.11.18.
- */
-/**
- * Created by niklasreinhard on 01.11.18.
- */
+import {
+  HTTP,
+  ROUTES
+} from '../api';
+
 const state = {
   currentUser: {
     username: 'neatgreat',
@@ -18,11 +17,28 @@ const getters = {
 };
 
 const actions = {
+  LOGIN_USER(context, {username, password}) {
+    let payload = {
+      "username": username,
+      "password": password
+    };    
+    return new Promise((resolve, reject) => {
+      HTTP.post(ROUTES.signin, payload).then((res) => {
+        resolve(res)
+      }).catch((err) => {
+        reject(err)
+      })
+    })
+  },
+  REGISTER_USER() {
 
+  }
 };
 
 const mutations = {
+  SET_CURRENT_USER(){
 
+  }
 };
 
 export default {
