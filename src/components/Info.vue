@@ -1,8 +1,8 @@
 <template>
   <div class="info" v-if="selectedChat">
     <div class="avatar">
-      <avatar :username="info.user.name" :src="info.user.profileImage" :size="100"></avatar>
-      <div class="name">{{info.user.name}}</div>
+      <avatar :username="info.name" :size="100"></avatar>
+      <div class="name">{{info.name}}</div>
       <div class="shortinfo">Zuletzt online 12:42</div>
     </div>
   </div>
@@ -40,7 +40,7 @@ export default {
 
   .avatar {
     display: inline;
-    margin-top: 10px;
+    top:10px;
     left: 20px;
     position: relative;
     margin-bottom: 10px;

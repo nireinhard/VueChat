@@ -18,8 +18,10 @@ const router = new Router({
       path: '/chat',
       name: 'chat',
       beforeEnter: (to, from, next) => {
-        if(!Store.state.user.currentUser.token){
+        if(Store.state.user.currentUser.token === null){
           next(new Error("Nicht angemeldet"));
+        }else{
+          next();
         }
       },
       // route level code-splitting
@@ -28,7 +30,7 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/Chat.vue')
     }
   ]
-})
+});
 
 router.onError(() => {
 });

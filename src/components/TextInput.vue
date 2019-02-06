@@ -41,7 +41,10 @@ export default {
     },
     onKeyup(e) {
       if (e.ctrlKey && e.keyCode === 13 && this.content.length) {
-        this.$store.commit("chats/SEND_MESSAGE", this.content);
+        this.$store.dispatch("chats/SEND_MESSAGE", this.content).then((res) => {
+          this.$store.dispatch("chats/GET_CHAT_MESSAGES");
+        });
+        //this.$store.commit("chats/SEND_MESSAGE", this.content);
         this.content = "";
       }
     }

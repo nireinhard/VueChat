@@ -12,6 +12,7 @@
     "bootstrap-vue": "^2.0.0-rc.11",
     "emoji-mart-vue": "^2.6.6",
     "iview": "^3.2.2",
+    "jwt-decode": "^2.2.0",
     "scroll-to-element": "^2.0.2",
     "vue": "^2.5.17",
     "vue-avatar": "^2.1.6",

@@ -1,47 +1,13 @@
-/**
- * Created by niklasreinhard on 01.11.18.
- */
+import {
+  HTTP,
+  ROUTES
+} from '../api';
+import Vue from "vue";
+
 const state = {
-  chats: [
-    {
-      id: 1,
-      user: {
-        name: 'Max',
-        profileImage: 'https://www.digital-commerce-day.de/wp-content/uploads/2018/10/michel-philipp-maruhn-profilfoto.jpg'
-      },
-      messages: [
-        {
-          from: 'Max',
-          message: 'Hi :)',
-          timestamp: null,
-          read: false
-        },
-        {
-          from: 'Max',
-          message: 'Was geht :)',
-          timestamp: null,
-          read: false
-        }
-      ]
-    },
-    {
-      id: 2,
-      user: {
-        name: 'Lisa',
-        profileImage: 'http://www.sensibelreisen.de/wp-content/uploads/2018/01/Profilfoto-Ronja-Menzel.jpg'
-      },
-      unread: 1,
-      messages: [
-        {
-          from: 'Lisa',
-          message: 'Na du :)',
-          timestamp: null,
-          read: false
-        }
-      ]
-    }
-  ],
-  selectedChat: null
+  chats: [],
+  selectedChat: null,
+  selectedChatMessages: []
 };
 
 const getters = {
@@ -51,18 +17,84 @@ const getters = {
 };
 
 const actions = {
-
+  GET_CHAT_MESSAGES({rootState, state, commit}){
+    return new Promise((resolve, reject) => {
+      const route = `${ROUTES.chats}/${state.selectedChat}/messages`;
+      HTTP.get(route, { headers: { Authorization: rootState.user.currentUser.token } }).then((res) => {
+        commit('SET_CHAT_MESSAGES', res.data);
+        resolve(res);
+      }).catch((err) => {
+        reject(err);
+      })
+    });
+  },
+  GET_CHATS({rootState, commit}){
+    return new Promise((resolve, reject) => {
+      const route = `${ROUTES.chats}?uid=${rootState.user.currentUser.id}`;
+      HTTP.get(route, { headers: { Authorization: rootState.user.currentUser.token } }).then((res) => {
+        commit('SET_CHATS', res.data);
+        resolve(res);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  },
+  CREATE_CHAT(context, data){
+    data.members.push({
+      user: {
+        id: context.rootState.user.currentUser.id
+      },
+      isAdmin: true
+    });
+    return new Promise((resolve, reject) => {
+      HTTP.post(ROUTES.chats, data, {
+        headers: {
+          'Authorization': context.rootState.user.currentUser.token
+        }
+      }).then((res) => {
+        resolve(res);
+      }).catch((err) => {
+        reject(err);
+      })
+    });
+  },
+  SEND_MESSAGE({state, rootState}, content){
+    const route = `${ROUTES.chats}/${state.selectedChat}/messages`;
+    const message = {
+      sender: {
+        id: rootState.user.currentUser.id
+      },
+      content: content
+    };
+    return new Promise((resolve, reject) => {
+      HTTP.post(route, message, {
+        headers: {
+          'Authorization': rootState.user.currentUser.token
+        }
+      }).then((res) => {
+        resolve(res);
+      }).catch((err) => {
+        reject(err);
+      })
+    });
+  }
 };
 
 const mutations = {
+  SET_CHAT_MESSAGES(state, messages){
+    Vue.set(state, 'selectedChatMessages', [...messages]);
+  },
+  SET_CHATS (state, chats){
+    Vue.set(state, 'chats', [...chats]);
+  },
   SEARCH_CHAT (state, searchterm) {
     let filtered = state.chats.filter(chat => chat.user.name === searchterm);
     state.chats = filtered;
   },
   SET_SELECTED_CHAT (state, id) {
     state.selectedChat = id;
-    const chat = state.chats.find(chat => chat.id === id);
-    chat.messages.forEach(message => message.read = true)
+    //const chat = state.chats.find(chat => chat.id === id);
+    //chat.messages.forEach(message => message.read = true)
   },
   SEND_MESSAGE (state, message) {
     const chat = state.chats.find(chat => chat.id === state.selectedChat);

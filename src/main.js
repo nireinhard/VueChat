@@ -9,18 +9,20 @@ import Notifications from 'vue-notification'
 import VueNativeNotification from 'vue-native-notification'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css';
+import VueCookies from 'vue-cookies'
 
- 
+Vue.use(VueCookies);
+
 Vue.use(VueNativeNotification, {
   requestOnNotify: true
 });
 
 Vue.config.productionTip = false;
-Vue.use(Notifications)
+Vue.use(Notifications);
 Vue.use(Loading);
 
 const bus = new Vue();
-Object.defineProperty(Vue.prototype, '$bus', { get () { return this.$root.bus } })
+Object.defineProperty(Vue.prototype, '$bus', { get () { return this.$root.bus } });
 
 Vue.use(BootstrapVue);
 

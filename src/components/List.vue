@@ -1,5 +1,6 @@
 <template>
   <div class="list">
+    <add-chat></add-chat>
     <ul>
       <li
         v-for="chat in chats"
@@ -9,12 +10,11 @@
         @click="selectChat(chat.id)"
       >
         <avatar
-          :src="chat.user.profileImage"
           size="60"
-          :username="chat.user.name"
+          :username="chat.isGroup ? chat.name : getChatPartnerName(chat)"
           style="background-size:cover;"
         ></avatar>
-        <p class="name">{{chat.user.name}}</p>
+        <p class="name">{{chat.isGroup ? chat.name : getChatPartnerName(chat)}}</p>
         <div class="unreadbadge" v-if="getUnreadCount(chat.id) > 0">{{getUnreadCount(chat.id)}}</div>
       </li>
     </ul>
@@ -29,24 +29,34 @@
 <script>
 import Avatar from "vue-avatar";
 import { VueContext } from 'vue-context';
+import AddChat from './AddChat';
 
 export default {
   components: {
     Avatar,
-    VueContext
+    VueContext,
+    AddChat
   },
   methods: {
+    getChatPartnerName(chat){
+      const currentUserId = this.$store.state.user.currentUser.id;
+      const filtered = chat.members.filter((member) => member.user.id !== currentUserId);
+      console.log(filtered);
+
+      return filtered[0].user.username;
+    },
     rightClick(text, data){
-      alert(`You clicked ${data}!`);
+    //
     },
     selectChat(id) {
       this.$store.commit("chats/SET_SELECTED_CHAT", id);
     },
     getUnreadCount(id) {
-      const chat = this.chats.find(chat => chat.id === id);
-      const unread = chat.messages.filter(message => message.read === false);
-      return unread.length;
-    }
+      //const chat = this.chats.find(chat => chat.id === id);
+      //const unread = chat.messages.filter(message => message.read === false);
+      //return unread.length;
+      return 0;
+    },
   },
   computed: {
     chats() {

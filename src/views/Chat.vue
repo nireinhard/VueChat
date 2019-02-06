@@ -30,6 +30,9 @@
         chatSelected(){
             return this.$store.state.chats.selectedChat
         }
+    },
+    mounted(){
+      this.$store.dispatch('chats/GET_CHATS');
     }
   }
 </script>

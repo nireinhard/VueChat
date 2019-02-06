@@ -1,14 +1,14 @@
 <template>
 <div id="chatwindow">
     <div id="message">
-        <ul v-if="currentChat">
-            <li v-for="item in currentChat.messages" :key="item.content">
+        <ul>
+            <li v-for="message in chatMessages" :key="message.id">
                 <p class="time">
                     <!-- <span>{{ item.date | time }}</span> -->
                 </p>
-                <div class="main" :class="{ self: item.self }">
-                    <img class="avatar" width="30" height="30" :src="item.self ? currentUser.profileImage : currentChat.user.profileImage" />
-                    <div class="text">{{ item.message }}</div>
+                <div class="main" :class="{ self: message.sender.id === currentUser.id }">
+                    <!--<img class="avatar" width="30" height="30" :src="message.self ? currentUser.profileImage : currentChat.user.profileImage" />-->
+                    <div class="text">{{ message.content }}</div>
                 </div>
             </li>
             <div id="bottomchat"></div>
@@ -18,12 +18,15 @@
 </template>
 <script>
   export default {
+    mounted(){
+      this.$store.dispatch('chats/GET_CHAT_MESSAGES');
+    },
     computed: {
       currentUser () {
         return this.$store.state.user.currentUser
       },
-      currentChat () {
-        return this.$store.state.chats.chats.find(chat => chat.id === this.$store.state.chats.selectedChat)
+      chatMessages () {
+        return this.$store.state.chats.selectedChatMessages
       }
     },
     updated () {
