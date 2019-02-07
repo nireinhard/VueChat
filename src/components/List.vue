@@ -31,7 +31,7 @@
                         :username="chat.isGroup ? chat.name : getChatPartnerName(chat)"
                         style="background-size:cover;"
                 ></avatar>
-                <p class="name">filtered {{chat.isGroup ? chat.name : getChatPartnerName(chat)}}</p>
+                <p class="name">{{chat.isGroup ? chat.name : getChatPartnerName(chat)}}</p>
                 <div class="unreadbadge" v-if="getUnreadCount(chat.id) > 0">{{getUnreadCount(chat.id)}}</div>
             </li>
         </ul>
@@ -58,8 +58,6 @@
       getChatPartnerName(chat) {
         const currentUserId = this.$store.state.user.currentUser.id;
         const filtered = chat.members.filter((member) => member.user.id !== currentUserId);
-        console.log(filtered);
-
         return filtered[0].user.username;
       },
       rightClick(text, data) {
