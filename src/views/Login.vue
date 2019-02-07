@@ -51,7 +51,7 @@
   export default {
     name: "Login",
     beforeMount(){
-
+      console.log(process.env);
     },
     data() {
       return {

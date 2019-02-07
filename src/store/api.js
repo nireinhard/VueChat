@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const HTTP = axios.create({
-  baseURL: 'http://localhost:8088/'
+  baseURL: process.env.VUE_APP_BACKEND_URL
 });
 
 export const ROUTES = {
