@@ -23,7 +23,6 @@
     },
     methods: {
       onKeyup (e) {
-        alert(e.target.value)
         this.$store.commit('chats/SEARCH_CHAT', e.target.value);
       }
     }

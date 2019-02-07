@@ -6,6 +6,7 @@ import Vue from "vue";
 
 const state = {
   chats: [],
+  filteredChats: [],
   selectedChat: null,
   selectedChatMessages: []
 };
@@ -88,21 +89,17 @@ const mutations = {
     Vue.set(state, 'chats', [...chats]);
   },
   SEARCH_CHAT (state, searchterm) {
-    let filtered = state.chats.filter(chat => chat.user.name === searchterm);
-    state.chats = filtered;
+    if (searchterm.length === 0) {
+      state.filteredChats.splice(0, state.filteredChats.length)
+    }else{
+      let filtered = state.chats.filter(chat => chat.name.includes(searchterm));
+      Vue.set(state, 'filteredChats', [...filtered]);
+    }
   },
   SET_SELECTED_CHAT (state, id) {
     state.selectedChat = id;
     //const chat = state.chats.find(chat => chat.id === id);
     //chat.messages.forEach(message => message.read = true)
-  },
-  SEND_MESSAGE (state, message) {
-    const chat = state.chats.find(chat => chat.id === state.selectedChat);
-    chat.messages.push({
-      from: 'Lisa',
-      message: message,
-      self: true
-    });
   }
 };
 
