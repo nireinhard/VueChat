@@ -76,9 +76,6 @@
         return this.$store.state.user.userSearchResults;
       }
     },
-    mounted() {
-      this.$refs.newChatModal.show()
-    },
     methods: {
       searchUsers(){
         this.$store.dispatch('user/SEARCH_USER', {username: this.searchString});
