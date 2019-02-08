@@ -1,9 +1,9 @@
 <template>
   <div class="info" v-if="selectedChat">
     <div class="avatar">
-      <avatar :username="info.name" :size="100"></avatar>
-      <div class="name">{{info.name}}</div>
-      <div class="shortinfo">Zuletzt online 12:42</div>
+      <avatar :username="partnerUsername" :size="100"></avatar>
+      <div class="name">{{partnerUsername}}</div>
+      <!--<div class="shortinfo">Zuletzt online 12:42</div>-->
     </div>
   </div>
 </template>
@@ -21,9 +21,10 @@ export default {
     selectedChat() {
       return this.$store.state.chats.selectedChat;
     },
-    info() {
+    partnerUsername() {
       const id = this.selectedChat;
-      return this.$store.state.chats.chats.find(chat => chat.id === id);
+      const chat = this.$store.state.chats.chats.find(chat => chat.id === id);
+      return chat.isGroup ? chat.name : chat.members.filter((member) => member.user.id !== this.$store.state.user.currentUser.id)[0].user.username;
     }
   }
 };

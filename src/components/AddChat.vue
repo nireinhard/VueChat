@@ -110,7 +110,13 @@
         this.$refs.newChatModal.show()
       },
       hideModal() {
+        this.resetData();
         this.$refs.newChatModal.hide()
+      },
+      resetData(){
+        this.selected = [];
+        this.searchString = '';
+        this.groupChatName = '';
       }
     }
   }
