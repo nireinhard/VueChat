@@ -99,7 +99,6 @@ const mutations = {
   SET_SELECTED_CHAT (state, id) {
     state.selectedChat = id;
     state.selectedChatMessages = [];
-    state.selectedChat = null;
     //const chat = state.chats.find(chat => chat.id === id);
     //chat.messages.forEach(message => message.read = true)
   }
