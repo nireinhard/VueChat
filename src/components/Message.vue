@@ -40,7 +40,7 @@
         position: absolute;
         top:125px;
         bottom:100px;
-        right:350px;
+        right:0px;
         left:202px;
         padding: 10px 15px;
         overflow-y: scroll;
