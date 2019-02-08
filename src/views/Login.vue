@@ -43,6 +43,8 @@
             <br>
             <label @click="toggleMode()" v-if="loginMode">Registrieren</label>
             <label @click="toggleMode()" v-else>Zurück zum Login</label>
+            <hr/>
+            Build: {{buildVersion}}
         </form>
     </div>
 </template>
@@ -55,6 +57,7 @@
     },
     data() {
       return {
+        buildVersion: process.env.VUE_APP_BUILD || '',
         loadingScreen: null,
         loginMode: true,
         username: "",
