@@ -39,7 +39,7 @@
     #message {
         position: absolute;
         top:125px;
-        bottom:100px;
+        bottom:200px;
         right:0px;
         left:202px;
         padding: 10px 15px;
