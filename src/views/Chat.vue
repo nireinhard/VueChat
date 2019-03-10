@@ -45,7 +45,7 @@
       this.$sse(route).then((sse) => {
         this.receiver = sse;
         sse.subscribe('', data => {
-          this.$store.commit('chats/RECEIVE_MESSAGE', data);
+          this.$store.dispatch('chats/GET_CHAT_MESSAGES', data);
           console.log(data);
         });
         sse.onError(e => {

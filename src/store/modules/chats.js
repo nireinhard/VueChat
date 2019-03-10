@@ -79,7 +79,7 @@ const mutations = {
   RECEIVE_MESSAGE(state, message){
     if (state.selectedChat && state.selectedChat.id === message.id){
       //selectedChat
-      console.log(JSON.stringify(state.selectedChat))
+
     }
   },
   SET_CHAT_MESSAGES(state, messages){
