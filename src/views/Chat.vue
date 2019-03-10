@@ -18,6 +18,7 @@
   import textinput from '../components/TextInput.vue'
   import info from '../components/Info.vue'
   import { ROUTES } from '../store/api';
+  import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 
   export default{
     components: {
@@ -34,9 +35,23 @@
     },
     mounted() {
       this.$store.dispatch('chats/GET_CHATS');
-      this.$sse(`${ROUTES.stream}`).then((msg) => console.log(msg));
+      const token = this.$store.state.user.currentUser.token;
+      const route = `http://localhost:8088/${ROUTES.stream}&token=${token}`;
+      
+      this.$sse(route).then((sse) => {
+        sse.subscribe('', data => {
+          console.log(data);
+        });
+        sse.onError(e => {
+          console.log(e);
+        })
+      }).catch(err => {
+        console.log(err);
+      });
 
-      let es = new EventSource(`${ROUTES.stream}`);
+      /*const EventSource = NativeEventSource || EventSourcePolyfill;
+
+      let es = new EventSource(route, { authorizationHeader: `Bearer ${token}` });
 
       es.addEventListener('message', event => {
         let data = JSON.parse(event.data);
@@ -48,7 +63,7 @@
           console.log('Event was closed');
           console.log(EventSource);
         }
-      }, false);
+      }, false);*/
     }
   }
 </script>
