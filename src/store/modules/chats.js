@@ -53,6 +53,13 @@ const actions = {
       })
     });
   },
+  SET_SELECTED_CHAT ({state, dispatch}, id) {
+    state.selectedChat = id;
+    state.selectedChatMessages = [];
+    dispatch('GET_CHAT_MESSAGES');
+    //const chat = state.chats.find(chat => chat.id === id);
+    //chat.messages.forEach(message => message.read = true)
+  },
   SEND_MESSAGE({state, rootState}, content){
     const route = `${ROUTES.chats}/${state.selectedChat}/messages`;
     const message = {
@@ -95,12 +102,6 @@ const mutations = {
       let filtered = state.chats.filter(chat => chat.name.includes(searchterm));
       Vue.set(state, 'filteredChats', [...filtered]);
     }
-  },
-  SET_SELECTED_CHAT (state, id) {
-    state.selectedChat = id;
-    state.selectedChatMessages = [];
-    //const chat = state.chats.find(chat => chat.id === id);
-    //chat.messages.forEach(message => message.read = true)
   }
 };
 

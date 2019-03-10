@@ -64,7 +64,7 @@
         //
       },
       selectChat(id) {
-        this.$store.commit("chats/SET_SELECTED_CHAT", id);
+        this.$store.dispatch("chats/SET_SELECTED_CHAT", id);
       },
       getUnreadCount(id) {
         //const chat = this.chats.find(chat => chat.id === id);
