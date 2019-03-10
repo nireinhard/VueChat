@@ -33,11 +33,10 @@
         }
     },
     mounted() {
-      console.log(this.$store.state.user.currentUser.token);
       this.$store.dispatch('chats/GET_CHATS');
-      this.$sse(`${ROUTES.stream}&token=${this.$store.state.user.currentUser.token}`).then((msg) => console.log(msg));
+      this.$sse(`${ROUTES.stream}`).then((msg) => console.log(msg));
 
-      let es = new EventSource(`${ROUTES.stream}&token=${this.$store.state.user.currentUser.token}`);
+      let es = new EventSource(`${ROUTES.stream}`);
 
       es.addEventListener('message', event => {
         let data = JSON.parse(event.data);
