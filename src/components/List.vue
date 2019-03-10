@@ -10,11 +10,11 @@
                     @click="selectChat(chat.id)"
             >
                 <avatar
-                        size="60"
-                        :username="chat.isGroup ? chat.name : getChatPartnerName(chat)"
+                        :size=60
+                        :username="chat.members.length > 2 ? chat.name : getChatPartnerName(chat)"
                         style="background-size:cover;"
                 ></avatar>
-                <p class="name">{{chat.isGroup ? chat.name : getChatPartnerName(chat)}}</p>
+                <p class="name">{{chat.members.length > 2 ? chat.name : getChatPartnerName(chat)}}</p>
                 <div class="unreadbadge" v-if="getUnreadCount(chat.id) > 0">{{getUnreadCount(chat.id)}}</div>
             </li>
         </ul>
@@ -27,11 +27,11 @@
                     @click="selectChat(chat.id)"
             >
                 <avatar
-                        size="60"
-                        :username="chat.isGroup ? chat.name : getChatPartnerName(chat)"
+                        :size=60
+                        :username="chat.members.length > 2 ? chat.name : getChatPartnerName(chat)"
                         style="background-size:cover;"
                 ></avatar>
-                <p class="name">{{chat.isGroup ? chat.name : getChatPartnerName(chat)}}</p>
+                <p class="name">{{chat.members.length > 2 ? chat.name : getChatPartnerName(chat)}}</p>
                 <div class="unreadbadge" v-if="getUnreadCount(chat.id) > 0">{{getUnreadCount(chat.id)}}</div>
             </li>
         </ul>
@@ -57,8 +57,8 @@
     methods: {
       getChatPartnerName(chat) {
         const currentUserId = this.$store.state.user.currentUser.id;
-        const filtered = chat.members.filter((member) => member.user.id !== currentUserId);
-        return filtered[0].user.username;
+        const filtered = chat.members.filter((member) => member.id !== currentUserId);
+        return chat.members.length > 2 ? chat.name : filtered[0].username;
       },
       rightClick(text, data) {
         //

@@ -6,7 +6,7 @@
                 <p class="time">
                     <!-- <span>{{ item.date | time }}</span> -->
                 </p>
-                <div class="main" :class="{ self: message.sender.id === currentUser.id }">
+                <div class="main" :class="{ self: message.sender === currentUser.id }">
                     <!--<img class="avatar" width="30" height="30" :src="message.self ? currentUser.profileImage : currentChat.user.profileImage" />-->
                     <div class="text">{{ message.content }}</div>
                 </div>
@@ -23,10 +23,10 @@
     },
     computed: {
       currentUser () {
-        return this.$store.state.user.currentUser
+        return this.$store.state.user.currentUser;
       },
       chatMessages () {
-        return this.$store.state.chats.selectedChatMessages
+        return this.$store.state.chats.selectedChatMessages;
       }
     },
     updated () {

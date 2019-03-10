@@ -9,4 +9,5 @@ export const ROUTES = {
   'signup': 'auth/signup',
   'user': 'api/v1/users',
   'chats': 'api/v1/chats',
+  'stream': 'api/v1/chats/messages/stream'
 };

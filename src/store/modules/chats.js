@@ -41,12 +41,6 @@ const actions = {
     });
   },
   CREATE_CHAT(context, data){
-    data.members.push({
-      user: {
-        id: context.rootState.user.currentUser.id
-      },
-      isAdmin: true
-    });
     return new Promise((resolve, reject) => {
       HTTP.post(ROUTES.chats, data, {
         headers: {

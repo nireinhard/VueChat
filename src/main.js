@@ -10,8 +10,10 @@ import VueNativeNotification from 'vue-native-notification'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css';
 import VueCookies from 'vue-cookies'
+import sse from 'vue-sse';
 
 Vue.use(VueCookies);
+Vue.use(sse);
 
 Vue.use(VueNativeNotification, {
   requestOnNotify: true

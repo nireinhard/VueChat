@@ -1,7 +1,7 @@
 <template>
     <div class="profile">
         <header>
-            <avatar size="100" :username="currentUser.name" inline="true"></avatar><br><br>
+            <avatar :size=100 :username="currentUser.name" :inline=true></avatar><br><br>
             <p class="name">{{currentUser.name}}</p>
         </header>
         <footer>

@@ -17,6 +17,7 @@
   import message from '../components/Message.vue'
   import textinput from '../components/TextInput.vue'
   import info from '../components/Info.vue'
+  import { ROUTES } from '../store/api';
 
   export default{
     components: {
@@ -31,8 +32,24 @@
             return this.$store.state.chats.selectedChat
         }
     },
-    mounted(){
+    mounted() {
+      console.log(this.$store.state.user.currentUser.token);
       this.$store.dispatch('chats/GET_CHATS');
+      this.$sse(`${ROUTES.stream}&token=${this.$store.state.user.currentUser.token}`).then((msg) => console.log(msg));
+
+      let es = new EventSource(`${ROUTES.stream}&token=${this.$store.state.user.currentUser.token}`);
+
+      es.addEventListener('message', event => {
+        let data = JSON.parse(event.data);
+        console.log(data);
+      }, false);
+
+      es.addEventListener('error', event => {
+        if (event.readyState == EventSource.CLOSED) {
+          console.log('Event was closed');
+          console.log(EventSource);
+        }
+      }, false);
     }
   }
 </script>

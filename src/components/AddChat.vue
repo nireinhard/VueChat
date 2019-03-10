@@ -73,7 +73,9 @@
     },
     computed: {
       results(){
-        return this.$store.state.user.userSearchResults;
+        let results = this.$store.state.user.userSearchResults;
+        let currentUserId = this.$store.state.user.currentUser.id;
+        return results.filter(user => user.id !== currentUserId)
       }
     },
     methods: {
@@ -82,18 +84,10 @@
       },
       createChat(evt){
         evt.preventDefault();
-        const transformedMembers = this.selected.map((member) => {
-          return {
-            user: {
-              id: member.id
-            },
-            isAdmin: false
-          };
-        });
         const data = {
           isGroup: this.selected.length > 1,
           name: (this.selected.length > 1) ? this.groupChatName : this.selected[0].username,
-          members: transformedMembers
+          members: this.selected
         };
         this.$store.dispatch('chats/CREATE_CHAT', data).then((res) => {
           this.$store.dispatch('chats/GET_CHATS');
