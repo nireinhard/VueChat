@@ -18,9 +18,13 @@
   import textinput from '../components/TextInput.vue'
   import info from '../components/Info.vue'
   import { ROUTES } from '../store/api';
-  import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 
   export default{
+    data () {
+      return {
+        receiver: null
+      }
+    },
     components: {
       card,
       list,
@@ -36,10 +40,12 @@
     mounted() {
       this.$store.dispatch('chats/GET_CHATS');
       const token = this.$store.state.user.currentUser.token;
-      const route = `http://localhost:8088/${ROUTES.stream}&token=${token}`;
-      
+      const route = `http://localhost:8088/${ROUTES.stream}?token=${token}`;
+
       this.$sse(route).then((sse) => {
+        this.receiver = sse;
         sse.subscribe('', data => {
+          this.$store.commit('chats/RECEIVE_MESSAGE', data);
           console.log(data);
         });
         sse.onError(e => {
@@ -49,21 +55,9 @@
         console.log(err);
       });
 
-      /*const EventSource = NativeEventSource || EventSourcePolyfill;
-
-      let es = new EventSource(route, { authorizationHeader: `Bearer ${token}` });
-
-      es.addEventListener('message', event => {
-        let data = JSON.parse(event.data);
-        console.log(data);
-      }, false);
-
-      es.addEventListener('error', event => {
-        if (event.readyState == EventSource.CLOSED) {
-          console.log('Event was closed');
-          console.log(EventSource);
-        }
-      }, false);*/
+    },
+    beforeDestroy(){
+        this.receiver.close();
     }
   }
 </script>
