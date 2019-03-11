@@ -40,7 +40,7 @@
     mounted() {
       this.$store.dispatch('chats/GET_CHATS');
       const token = this.$store.state.user.currentUser.token;
-      const route = `https://vs.saar-a.de:8080/${ROUTES.stream}?token=${token}`;
+      const route = `${process.env.VUE_APP_BACKEND_URL}/${ROUTES.stream}?token=${token}`;
 
       this.$sse(route).then((sse) => {
         this.receiver = sse;
