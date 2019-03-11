@@ -67,11 +67,9 @@
         this.$store.dispatch("chats/SET_SELECTED_CHAT", id);
       },
       getUnreadCount(id) {
-        //const chat = this.chats.find(chat => chat.id === id);
-        //const unread = chat.messages.filter(message => message.read === false);
-        //return unread.length;
-        return 0;
-      },
+        let unread = this.$store.state.chats.unread.filter(x => x.id === id);
+        return unread.length > 0 ? unread[0].count : 0;
+        },
     },
     computed: {
       chats() {

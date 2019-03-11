@@ -9,7 +9,8 @@ const state = {
   chats: [],
   filteredChats: [],
   selectedChat: null,
-  selectedChatMessages: []
+  selectedChatMessages: [],
+  unread: []
 };
 
 const getters = {
@@ -57,6 +58,10 @@ const actions = {
   SET_SELECTED_CHAT ({state, dispatch}, id) {
     state.selectedChat = id;
     state.selectedChatMessages = [];
+    const unread = state.unread.filter(x => x.id===id);
+    if (unread.length > 0){
+      unread[0].count = 0;
+    }
     dispatch('GET_CHAT_MESSAGES');
     //const chat = state.chats.find(chat => chat.id === id);
     //chat.messages.forEach(message => message.read = true)
@@ -84,9 +89,15 @@ const actions = {
 };
 
 const mutations = {
-  RECEIVE_MESSAGE(state, message){
-    if (state.selectedChat && state.selectedChat.id === message.id){
-
+  SET_UNSET_COUNT(state, payload){
+    if (state.selectedChat && state.selectedChat === payload.chat){
+      return;
+    }
+    const unread = state.unread.filter(x => x.id === payload.chat)[0];
+    if(unread){
+      unread.count += 1;
+    }else{
+      state.unread.push({id: payload.chat, count: 1});
     }
   },
   SET_CHAT_MESSAGES(state, messages){
