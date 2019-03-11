@@ -40,7 +40,7 @@
     mounted() {
       this.$store.dispatch('chats/GET_CHATS');
       const token = this.$store.state.user.currentUser.token;
-      const route = `http://localhost:8088/${ROUTES.stream}?token=${token}`;
+      const route = `${ROUTES.stream}?token=${token}`;
 
       this.$sse(route).then((sse) => {
         this.receiver = sse;

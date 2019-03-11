@@ -3,6 +3,7 @@ import {
   ROUTES
 } from '../api';
 import Vue from "vue";
+const _ = require('lodash');
 
 const state = {
   chats: [],
@@ -85,7 +86,6 @@ const actions = {
 const mutations = {
   RECEIVE_MESSAGE(state, message){
     if (state.selectedChat && state.selectedChat.id === message.id){
-      //selectedChat
 
     }
   },
