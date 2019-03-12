@@ -37,8 +37,8 @@
         </ul>
         <vue-context ref="menu">
             <ul slot-scope="child">
-                <li @click="rightClick($event.target.innerText, child.data)" style="color:black;">Blockieren</li>
-                <li @click="rightClick($event.target.innerText, child.data)" style="color:black;">Löschen</li>
+                <li @click="rightClick('block', child.data)" style="color:black;">Blockieren</li>
+                <li @click="rightClick('delete', child.data)" style="color:black;">Löschen</li>
             </ul>
         </vue-context>
     </div>
@@ -61,7 +61,11 @@
         return chat.members.length > 2 ? chat.name : filtered[0].username;
       },
       rightClick(text, data) {
-        //
+        if(text === "block"){
+          this.$store.dispatch("users/BLOCK_USER");
+        }else if (text === "delete"){
+          this.$store.dispatch("chats/DELETE_CHAT", data.chatid).then((_) => this.$store.dispatch('chats/GET_CHATS'));
+        }
       },
       selectChat(id) {
         this.$store.dispatch("chats/SET_SELECTED_CHAT", id);

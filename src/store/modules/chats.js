@@ -19,10 +19,28 @@ const getters = {
 };
 
 const actions = {
+  DELETE_CHAT({rootState}, id){
+    return new Promise((resolve, reject) => {
+      const route = `${ROUTES.chats}/${id}`;
+      HTTP.delete(route, {
+        headers: {
+          'Authorization': rootState.user.currentUser.token
+        }
+      }).then((res) => {
+        resolve(res);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  },
   GET_CHAT_MESSAGES({rootState, state, commit}){
     return new Promise((resolve, reject) => {
       const route = `${ROUTES.chats}/${state.selectedChat}/messages`;
-      HTTP.get(route, { headers: { Authorization: rootState.user.currentUser.token } }).then((res) => {
+      HTTP.get(route, {
+        headers: {
+          'Authorization': rootState.user.currentUser.token
+        }
+      }).then((res) => {
         commit('SET_CHAT_MESSAGES', res.data);
         resolve(res);
       }).catch((err) => {
@@ -33,7 +51,11 @@ const actions = {
   GET_CHATS({rootState, commit}){
     return new Promise((resolve, reject) => {
       const route = `${ROUTES.chats}?uid=${rootState.user.currentUser.id}`;
-      HTTP.get(route, { headers: { Authorization: rootState.user.currentUser.token } }).then((res) => {
+      HTTP.get(route, {
+        headers: {
+          'Authorization': rootState.user.currentUser.token
+        }
+      }).then((res) => {
         commit('SET_CHATS', res.data);
         resolve(res);
       }).catch((err) => {
