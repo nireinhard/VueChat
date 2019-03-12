@@ -3,7 +3,6 @@ import {
   ROUTES
 } from '../api';
 import Vue from "vue";
-const _ = require('lodash');
 
 const state = {
   chats: [],
@@ -63,8 +62,6 @@ const actions = {
       unread[0].count = 0;
     }
     dispatch('GET_CHAT_MESSAGES');
-    //const chat = state.chats.find(chat => chat.id === id);
-    //chat.messages.forEach(message => message.read = true)
   },
   SEND_MESSAGE({state, rootState}, content){
     const route = `${ROUTES.chats}/${state.selectedChat}/messages`;

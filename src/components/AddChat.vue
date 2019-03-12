@@ -6,7 +6,7 @@
         </b-button>
         <hr/>
         <b-modal ref="newChatModal" hide-footer size="lg">
-            <b-form @submit="createChat">
+            <b-form @submit="createChat" @keydown.enter.prevent="searchUsers">
                 <div v-if="selected.length > 1">
                     <b-form-input v-model="groupChatName"
                                   type="text"
