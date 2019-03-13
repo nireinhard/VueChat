@@ -52,8 +52,12 @@
 <script>
   export default {
     name: "Login",
-    beforeMount(){
-      console.log(process.env);
+    mounted(){
+      const cookieToken = this.$cookies.get("token");
+      if(cookieToken){
+        this.$store.commit('user/SET_USER', cookieToken);
+        this.$router.push({name: "chat"});
+      }
     },
     data() {
       return {
@@ -98,12 +102,13 @@
             const token = res.headers.authorization;
             this.showDialog("success", "Erfolgreich angemeldet");
             this.loadingScreen.hide();
+            this.$cookies.set("token", token, '1h');
             this.$router.push({name: "chat"});
           })
           .catch(err => {
             // show error
             this.loadingScreen.hide();
-            this.showDialog("error", err);
+            this.showDialog("error", "Fehler beim Anmelden");
           });
       },
       register() {
