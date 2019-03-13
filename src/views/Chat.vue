@@ -22,7 +22,8 @@
   export default{
     data () {
       return {
-        receiver: null
+        receiveMessages: null,
+        receiveChats: null
       }
     },
     components: {
@@ -37,27 +38,50 @@
             return this.$store.state.chats.selectedChat
         }
     },
+    methods: {
+      receiveNewMessages(){
+        const token = this.$store.state.user.currentUser.token;
+        const route = `${process.env.VUE_APP_BACKEND_URL}/${ROUTES.stream_messages}?token=${token}`;
+
+        this.$sse(route).then((sse) => {
+          this.receiveMessages = sse;
+          sse.subscribe('', data => {
+            this.$store.dispatch('chats/GET_CHAT_MESSAGES');
+            this.$store.commit('chats/SET_UNSET_COUNT', JSON.parse(data));
+          });
+          sse.onError(e => {
+            console.log(e);
+          })
+        }).catch(err => {
+          console.log(err);
+        });
+      },
+      receiveNewChats(){
+        const token = this.$store.state.user.currentUser.token;
+        const route = `${process.env.VUE_APP_BACKEND_URL}/${ROUTES.stream_chats}?token=${token}`;
+
+        this.$sse(route).then((sse) => {
+          this.receiveChats = sse;
+          sse.subscribe('', data => {
+            this.$store.dispatch('chats/GET_CHATS');
+          });
+          sse.onError(e => {
+            console.log(e);
+          })
+        }).catch(err => {
+          console.log(err);
+        });
+      }
+    },
     mounted() {
       this.$store.dispatch('chats/GET_CHATS');
-      const token = this.$store.state.user.currentUser.token;
-      const route = `${process.env.VUE_APP_BACKEND_URL}/${ROUTES.stream}?token=${token}`;
-
-      this.$sse(route).then((sse) => {
-        this.receiver = sse;
-        sse.subscribe('', data => {
-          this.$store.dispatch('chats/GET_CHAT_MESSAGES');
-          this.$store.commit('chats/SET_UNSET_COUNT', JSON.parse(data));
-        });
-        sse.onError(e => {
-          console.log(e);
-        })
-      }).catch(err => {
-        console.log(err);
-      });
+      this.receiveNewMessages();
+      this.receiveNewChats();
 
     },
     beforeDestroy(){
-        this.receiver.close();
+      if (this.receiveMessages) this.receiveMessages.close();
+      if (this.receiveChats) this.receiveChats.close();
     }
   }
 </script>
