@@ -3,6 +3,9 @@
         <div class="chats">
             <card></card>
             <list></list>
+            <b-button @click="logout()" class="bottom">
+                Abmelden
+            </b-button>
         </div>
         <div class="main" v-if="chatSelected">
             <info></info>
@@ -39,6 +42,11 @@
         }
     },
     methods: {
+      logout(){
+        this.$store.commit('users/LOGOUT_USER');
+        this.$cookies.remove("token");
+        this.$router.push({name: "home"});
+      },
       receiveNewMessages(){
         const token = this.$store.state.user.currentUser.token;
         const route = `${process.env.VUE_APP_BACKEND_URL}/${ROUTES.stream_messages}?token=${token}`;
@@ -120,5 +128,10 @@
             overflow: hidden;
             background-color: #eee;
         }
+    }
+    .bottom{
+        position:absolute;
+        bottom:30px;
+        left:50px;
     }
 </style>

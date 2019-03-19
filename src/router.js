@@ -5,6 +5,8 @@ import Store from './store/store'
 Vue.use(Router);
 
 const router = new Router({
+  mode: 'history',
+  base: '/',
   routes: [
     {
       path: '/',

@@ -32,9 +32,6 @@ const actions = {
       });
     });
   },
-  CHECK_COOKIE({commit}){
-
-  },
   LOGIN_USER({commit}, {
     username,
     password
@@ -72,6 +69,14 @@ const actions = {
 };
 
 const mutations = {
+  LOGOUT_USER(state){
+    state.currentUser = {
+      id: '',
+      profileImage: '',
+      name: '',
+      token: null
+    }
+  },
   SET_USER_SEARCH_RESULTS(state, results){
     Vue.set(state, 'userSearchResults', [...results]);
   },
