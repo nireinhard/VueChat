@@ -19,23 +19,19 @@ export default {
   },
   computed: {
     selectedChat() {
-      return this.$store.state.chats.selectedChat;
+      let chatId = this.$store.state.chats.selectedChat;
+      return this.$store.state.chats.chats.find(chat => chat.id === chatId);
     },
     chatPartner(){
-      const id = this.selectedChat;
-      const chat = this.$store.state.chats.chats.find(chat => chat.id === id);
-      return chat.members.filter((member) => member.id !== this.$store.state.user.currentUser.id)[0];
+      return this.selectedChat.members.filter((member) => member.id !== this.$store.state.user.currentUser.id)[0];
     }
   },
   methods: {
     getPartnerUsername() {
-      const chat = this.$store.state.chats.chats.find(chat => chat.id === this.selectedChat);
-      return chat.members.length > 2 ? chat.name : this.chatPartner.username;
+      return this.selectedChat.members.length > 2 ? this.selectedChat.name : this.chatPartner.username;
     },
     getPartnerStatus(){
-      const chat = this.$store.state.chats.chats.find(chat => chat.id === this.selectedChat);
-      console.log(this.chatPartner);
-      return chat.members.length > 2 ? "" : this.chatPartner.status;
+      return this.selectedChat.members.length > 2 ? " " : this.chatPartner.status;
     }
   }
 };
