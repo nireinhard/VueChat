@@ -58,10 +58,10 @@
             this.$store.commit('chats/SET_UNSET_COUNT', JSON.parse(data));
           });
           sse.onError(e => {
-            console.log(e);
+
           })
         }).catch(err => {
-          console.log(err);
+
         });
       },
       receiveNewChats(){
@@ -71,13 +71,14 @@
         this.$sse(route).then((sse) => {
           this.receiveChats = sse;
           sse.subscribe('', data => {
+            console.log(data);
             this.$store.dispatch('chats/GET_CHATS');
           });
           sse.onError(e => {
-            console.log(e);
+            this.$notify("Fehler beim Empfangen neuer Nachrichten: " + e.message);
           })
         }).catch(err => {
-          console.log(err);
+          this.$notify("Fehler beim Einrichten der SSE Verbindung: " + err);
         });
       }
     },

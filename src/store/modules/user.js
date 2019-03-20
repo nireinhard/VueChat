@@ -9,6 +9,7 @@ import jwtDecode from 'jwt-decode';
 const state = {
   currentUser: {
     id: '',
+    status: 'Hey there I\'m using VueChat',
     profileImage: '',
     name: '',
     token: null
@@ -17,7 +18,6 @@ const state = {
 };
 
 const getters = {
-
 };
 
 const actions = {

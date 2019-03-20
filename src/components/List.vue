@@ -37,7 +37,7 @@
         </ul>
         <vue-context ref="menu">
             <ul slot-scope="child">
-                <li @click="rightClick('block', child.data)" style="color:black;">Blockieren</li>
+                <!--<li @click="rightClick('block', child.data)" style="color:black;">Blockieren</li>-->
                 <li @click="rightClick('delete', child.data)" style="color:black;">Löschen</li>
             </ul>
         </vue-context>

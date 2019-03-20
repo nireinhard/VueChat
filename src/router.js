@@ -5,16 +5,12 @@ import Store from './store/store'
 Vue.use(Router);
 
 const router = new Router({
-  mode: 'history',
   base: '/',
   routes: [
     {
       path: '/',
       name: 'home',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/Login.vue')
+      component: () => import('./views/Login.vue')
     },
     {
       path: '/chat',
@@ -26,10 +22,7 @@ const router = new Router({
           next();
         }
       },
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/Chat.vue')
+      component: () => import('./views/Chat.vue')
     }
   ]
 });

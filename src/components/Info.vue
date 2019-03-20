@@ -3,7 +3,7 @@
     <div class="avatar">
       <avatar :username="getPartnerUsername()" :size=100></avatar>
       <div class="name">{{getPartnerUsername()}}</div>
-      <!--<div class="shortinfo">Zuletzt online 12:42</div>-->
+      <div class="shortinfo">{{getPartnerStatus() || "Hey there I'm using VueChat"}}</div>
     </div>
   </div>
 </template>
@@ -20,14 +20,22 @@ export default {
   computed: {
     selectedChat() {
       return this.$store.state.chats.selectedChat;
+    },
+    chatPartner(){
+      const id = this.selectedChat;
+      const chat = this.$store.state.chats.chats.find(chat => chat.id === id);
+      return chat.members.filter((member) => member.id !== this.$store.state.user.currentUser.id)[0];
     }
   },
   methods: {
     getPartnerUsername() {
-      const id = this.selectedChat;
-      const chat = this.$store.state.chats.chats.find(chat => chat.id === id);
-      const partner = chat.members.filter((member) => member.id !== this.$store.state.user.currentUser.id)[0];
-      return chat.members.length > 2 ? chat.name : partner.username;
+      const chat = this.$store.state.chats.chats.find(chat => chat.id === this.selectedChat);
+      return chat.members.length > 2 ? chat.name : this.chatPartner.username;
+    },
+    getPartnerStatus(){
+      const chat = this.$store.state.chats.chats.find(chat => chat.id === this.selectedChat);
+      console.log(this.chatPartner);
+      return chat.members.length > 2 ? "" : this.chatPartner.status;
     }
   }
 };
@@ -62,7 +70,7 @@ export default {
     vertical-align: top;
     position: absolute;
     left: 120px;
-    width: 100%;
+    width: 500px;
     margin-top: -60px;
   }
 }
