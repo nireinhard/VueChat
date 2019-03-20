@@ -75,7 +75,7 @@
       results(){
         let results = this.$store.state.user.userSearchResults;
         let currentUserId = this.$store.state.user.currentUser.id;
-        return results.filter(user => user.id !== currentUserId)
+        return this.searchString ? results.filter(user => user.id !== currentUserId) : []
       }
     },
     methods: {
@@ -91,8 +91,8 @@
         };
         this.$store.dispatch('chats/CREATE_CHAT', data).then((res) => {
           this.$store.dispatch('chats/GET_CHATS');
+          this.hideModal();
         });
-        this.hideModal();
       },
       addToSelected(user){
         this.selected.push(user);

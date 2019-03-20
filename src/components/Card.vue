@@ -1,12 +1,26 @@
 <template>
-    <div class="profile">
-        <header>
-            <avatar :size=100 :username="currentUser.name" :inline=true></avatar><br><br>
-            <p class="name">{{currentUser.name}}</p>
-        </header>
-        <footer>
-            <input class="search" type="text" placeholder="Suchen" @keyup="onKeyup">
-        </footer>
+    <div>
+        <div class="profile">
+            <header>
+                <avatar :size=100 :username="currentUser.name" :inline=true></avatar><br><br>
+                <p class="name" @click="showModal">{{currentUser.name}}</p>
+            </header>
+            <footer>
+                <input class="search" type="text" placeholder="Suchen" @keyup="onKeyup">
+            </footer>
+        </div>
+
+        <b-modal ref="statusModal" hide-footer size="lg">
+            <strong class="text">Status ändern</strong>
+            <hr/>
+            <b-form-input v-model="status"
+                          type="text"
+                          :placeholder="currentUser.status"
+                          id="status"
+            ></b-form-input>
+            <hr/>
+            <button @click="updateStatus()" class="btn btn-lg btn-primary btn-block">Speichern</button>
+        </b-modal>
     </div>
 </template>
 <script>
@@ -16,15 +30,36 @@
     components: {
       Avatar
     },
+    data () {
+      return {
+        status: ''
+      }
+    },
     computed: {
       currentUser () {
         return this.$store.state.user.currentUser
       }
     },
     methods: {
+      updateStatus () {
+        this.$store.dispatch('user/UPDATE_STATUS', {status: this.status}).then((res) => {
+          this.hideModal();
+          this.$notify({
+            group: "all",
+            type: "success",
+            text: "Status erfolgreich geändert"
+          });
+        });
+      },
       onKeyup (e) {
         this.$store.commit('chats/SEARCH_CHAT', e.target.value);
-      }
+      },
+      showModal() {
+        this.$refs.statusModal.show()
+      },
+      hideModal() {
+        this.$refs.statusModal.hide()
+      },
     }
   }
 </script>
@@ -62,5 +97,8 @@
             outline: none;
             background-color: #26292E;
         }
+    }
+    .text{
+        color:#000;
     }
 </style>

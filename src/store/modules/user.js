@@ -9,7 +9,7 @@ import jwtDecode from 'jwt-decode';
 const state = {
   currentUser: {
     id: '',
-    status: 'Hey there I\'m using VueChat',
+    status: '',
     profileImage: '',
     name: '',
     token: null
@@ -21,6 +21,16 @@ const getters = {
 };
 
 const actions = {
+  UPDATE_STATUS({state, rootState, dispatch}, newStatus){
+    return new Promise((resolve, reject) => {
+      const route = `${ROUTES.user}/${state.currentUser.id}/status`;
+      console.log(newStatus);
+      HTTP.put(route, newStatus, { headers: { Authorization: rootState.user.currentUser.token } }).then((res) => {
+        dispatch('LOAD_USER_STATUS');
+        resolve(res);
+      }).catch((err) => reject(err));
+    })
+  },
   SEARCH_USER({commit, rootState}, username){
     return new Promise((resolve, reject) => {
       const route = `${ROUTES.user}?username=${username.username}`;
@@ -32,7 +42,15 @@ const actions = {
       });
     });
   },
-  LOGIN_USER({commit}, {
+  LOAD_USER_STATUS ({state, rootState, commit}){
+    return new Promise((resolve, reject) => {
+      const route = `${ROUTES.user}/${state.currentUser.id}`;
+      HTTP.get(route, { headers: { Authorization: rootState.user.currentUser.token } }).then((res) => {
+        commit('SET_USER_STATUS', res.data.status);
+      }).catch((err) => reject(err));
+    });
+  },
+  LOGIN_USER({commit, dispatch}, {
     username,
     password
   }) {
@@ -44,6 +62,7 @@ const actions = {
       HTTP.post(ROUTES.signin, payload).then((res) => {
         const token = res.headers.authorization;
         commit('SET_USER', token);
+        dispatch('LOAD_USER_STATUS');
         resolve(res)
       }).catch((err) => {
         reject(err)
@@ -74,11 +93,15 @@ const mutations = {
       id: '',
       profileImage: '',
       name: '',
+      status: '',
       token: null
     }
   },
   SET_USER_SEARCH_RESULTS(state, results){
     Vue.set(state, 'userSearchResults', [...results]);
+  },
+  SET_USER_STATUS(state, status){
+    state.currentUser.status = status;
   },
   SET_USER(state, token){
     const decoded = jwtDecode(token);

@@ -56,6 +56,7 @@
       const cookieToken = this.$cookies.get("token");
       if(cookieToken){
         this.$store.commit('user/SET_USER', cookieToken);
+        this.$store.dispatch('user/LOAD_USER_STATUS');
         this.$router.push({name: "chat"});
       }
     },
