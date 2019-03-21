@@ -90,13 +90,13 @@
       submit(evt){
         evt.preventDefault();
         if (this.edit){
-          const data = {
-            members: this.selected
-          };
-          this.$store.dispatch('chats/UPDATE_MEMBERS', data).then((res) => {
-            this.$bus.$emit("flashmessage","success","Mitglieder aktualisiert");
-            this.hideModal();
+          this.selected.forEach((user) => {
+            this.$store.dispatch('chats/UPDATE_MEMBERS', user).then((res) => {
+              this.$store.dispatch('chats/GET_CHATS');
+            });
           });
+          this.$bus.$emit("flashmessage","success","Mitglieder aktualisiert");
+          this.hideModal();
         }else{
           const data = {
             isGroup: this.selected.length > 1,
