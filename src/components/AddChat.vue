@@ -129,6 +129,7 @@
         this.selected = [];
         this.searchString = '';
         this.groupChatName = '';
+        this.edit = false;
       },
       receiveEvent(){
         this.groupChatName = this.selectedChat.name;
@@ -144,6 +145,7 @@
     },
     beforeDestroy(){
       this.$bus.$off('editMembersEvent');
+      this.resetData();
     }
   }
 </script>
