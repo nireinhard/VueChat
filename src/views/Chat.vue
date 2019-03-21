@@ -86,11 +86,18 @@
       this.$store.dispatch('chats/GET_CHATS');
       this.receiveNewMessages();
       this.receiveNewChats();
-
+      this.$bus.$on('flashmessage', (mode, message) => {
+        this.$notify({
+          group: "all",
+          type: mode,
+          text: message
+        });
+      })
     },
     beforeDestroy(){
       if (this.receiveMessages) this.receiveMessages.close();
       if (this.receiveChats) this.receiveChats.close();
+      this.$bus.$off('flashmessage');
     }
   }
 </script>

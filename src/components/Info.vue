@@ -5,6 +5,7 @@
       <div class="name">{{getPartnerUsername()}}</div>
       <div class="shortinfo">{{getPartnerStatus() || "Hey there I'm using VueChat"}}</div>
     </div>
+      <button v-if="selectedChat.members.length > 2" class="btn btn-primary manage" @click="editMembers()">Verwalten</button>
   </div>
 </template>
 <script>
@@ -32,6 +33,9 @@ export default {
     },
     getPartnerStatus(){
       return this.selectedChat.members.length > 2 ? " " : this.chatPartner.status;
+    },
+    editMembers(){
+      this.$bus.$emit('editMembersEvent');
     }
   }
 };
@@ -69,5 +73,10 @@ export default {
     width: 500px;
     margin-top: -60px;
   }
+    .manage{
+        position: absolute;
+        right:20px;
+        top:40px;
+    }
 }
 </style>

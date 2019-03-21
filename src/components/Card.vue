@@ -44,11 +44,7 @@
       updateStatus () {
         this.$store.dispatch('user/UPDATE_STATUS', {status: this.status}).then((res) => {
           this.hideModal();
-          this.$notify({
-            group: "all",
-            type: "success",
-            text: "Status erfolgreich geändert"
-          });
+          this.$bus.$emit("flashmessage","success","Status erfolgreich geändert");
         });
       },
       onKeyup (e) {

@@ -19,6 +19,20 @@ const getters = {
 };
 
 const actions = {
+  UPDATE_MEMBERS({state, rootState}, data){
+    return new Promise((resolve, reject) => {
+      const route = `${ROUTES.chats}/${state.selectedChat}/members`;
+      HTTP.post(route, data, {
+        headers: {
+          'Authorization': rootState.user.currentUser.token
+        }
+      }).then((res) => {
+        resolve(res);
+      }).catch((err) => {
+        reject(err);
+      })
+    });
+  },
   DELETE_CHAT({rootState}, id){
     return new Promise((resolve, reject) => {
       const route = `${ROUTES.chats}/${id}`;
