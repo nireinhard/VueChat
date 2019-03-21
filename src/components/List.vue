@@ -15,7 +15,7 @@
                         style="background-size:cover;"
                 ></avatar>
                 <p class="name">{{chat.members.length > 2 ? chat.name : getChatPartnerName(chat)}}</p>
-                <div class="unreadbadge" v-if="getUnreadCount(chat.id) > 0">{{getUnreadCount(chat.id)}}</div>
+                <div class="unreadbadge" v-if="getUnreadCount(chat.id) > 0"></div>
             </li>
         </ul>
         <ul v-else>
@@ -32,7 +32,7 @@
                         style="background-size:cover;"
                 ></avatar>
                 <p class="name">{{chat.members.length > 2 ? chat.name : getChatPartnerName(chat)}}</p>
-                <div class="unreadbadge" v-if="getUnreadCount(chat.id) > 0">{{getUnreadCount(chat.id)}}</div>
+                <div class="unreadbadge" v-if="getUnreadCount(chat.id) > 0"></div>
             </li>
         </ul>
         <vue-context ref="menu">
